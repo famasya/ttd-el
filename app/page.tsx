@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { jsPDF } from "jspdf";
-import { Download, Eraser, Save } from "lucide-react";
+import { Download, Eraser, Info, Save } from "lucide-react";
+import Link from "next/link";
 import "pdfjs-dist/build/pdf.worker.min.mjs";
 import React, { useEffect, useRef, useState } from "react";
 import { Document, Page } from "react-pdf";
@@ -199,13 +200,21 @@ export default function PDFSignatureComponent() {
   return (
     <div className="py-8 max-w-full px-4 sm:px-8 mx-auto min-h-screen">
       {/* File Input */}
-      <div className="">
-        <h1 className="text-2xl font-bold font-mono mb-4">TTD ELEKTRONIK</h1>
-        <Input type="file" accept=".pdf" onChange={handleFileChange} className="max-w-md" />
+      <div className="max-w-xl">
+        <div className="flex flex-row gap-2 items-center justify-between">
+          <h1 className="text-2xl font-bold">TTD ELEKTRONIK</h1>
+          <Link href="https://github.com/famasya/ttd-el" target="_blank">
+            <span className="font-mono font-medium text-sm underline">Source Code</span>
+          </Link>
+        </div>
+        <div className="mb-4 bg-gray-300 text-gray-800 px-4 py-1 rounded flex items-center gap-2">
+          <Info className="h-4 w-4" /> File tidak disimpan di server
+        </div>
+        <Input type="file" accept=".pdf" onChange={handleFileChange} />
       </div>
 
       {/* PDF Rendering */}
-      {pdfFile && (
+      {pdfFile ? (
         <div className="mb-16">
           <Document
             file={pdfFile}
@@ -219,7 +228,15 @@ export default function PDFSignatureComponent() {
             Save PDF
           </Button>
         </div>
-      )}
+      ) : <div className="mt-8">
+        <strong>Petunjuk:</strong>
+        <ol className="list-decimal ml-4 space-y-2">
+          <li>Upload PDF file</li>
+          <li>Beri tanda tangan</li>
+          <li>Klik <span className="font-mono font-medium text-sm bg-gray-800 text-white px-1 py-0.5 rounded">Save Signature</span> untuk menyimpan tanda tangan</li>
+          <li>Klik <span className="font-mono font-medium text-sm bg-gray-800 text-white px-1 py-0.5 rounded">Save PDF</span> untuk menyimpan file</li>
+        </ol>
+      </div>}
     </div>
   );
 }
