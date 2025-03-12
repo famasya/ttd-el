@@ -47,7 +47,13 @@ export default function PDFSignatureComponent() {
     const sigCanvas = sigCanvases.current[page];
     if (!sigCanvas) return;
 
-    const trimmedCanvas = sigCanvas.getTrimmedCanvas();
+    let trimmedCanvas;
+    try {
+      trimmedCanvas = sigCanvas.getTrimmedCanvas();
+    } catch (error) {
+      console.error('Error with getTrimmedCanvas:', error);
+      trimmedCanvas = sigCanvas.getCanvas(); // Fallback to full canvas
+    }
     const sigData = trimmedCanvas.toDataURL('image/png');
 
     // Get the trimmed canvas dimensions and position relative to the full canvas
